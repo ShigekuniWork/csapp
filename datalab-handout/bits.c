@@ -211,7 +211,12 @@ int bitCount(int x) {
  *   Max ops: 12
  *   Rating: 4
  */
-int bang(int x) { return 2; }
+int bang(int x) {
+  int combined = x | (~x + 1);
+  int shift_msb = combined >> 31;
+
+  return shift_msb + 1;
+}
 /*
  * tmin - return minimum two's complement integer
  *   Legal ops: ! ~ & ^ | + << >>
