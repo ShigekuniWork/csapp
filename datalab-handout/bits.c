@@ -246,7 +246,12 @@ int fitsBits(int x, int n) {
  *   Max ops: 15
  *   Rating: 2
  */
-int divpwr2(int x, int n) { return 2; }
+int divpwr2(int x, int n) {
+  int bias = (1 << n) + ~0;
+
+  int conditional_bias = (x >> 31) & bias;
+  return (x + conditional_bias) >> n;
+}
 /*
  * negate - return -x
  *   Example: negate(1) = -1.
