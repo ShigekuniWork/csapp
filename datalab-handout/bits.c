@@ -233,7 +233,11 @@ int tmin(void) { return 1 << 31; }
  *   Max ops: 15
  *   Rating: 2
  */
-int fitsBits(int x, int n) { return 2; }
+int fitsBits(int x, int n) {
+  int shift_amount = 32 + (~n + 1);
+  int temp = (x << shift_amount) >> shift_amount;
+  return !(temp ^ x);
+}
 /*
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
  *  Round toward zero
