@@ -146,7 +146,13 @@ int bitAnd(int x, int y) { return ~(~x | ~y); }
  *   Max ops: 6
  *   Rating: 2
  */
-int getByte(int x, int n) { return 2; }
+int getByte(int x, int n) {
+  int all_one_byte = 0xFF;
+  /* Align the target byte with LSB to enable masking */
+  int shift_amount = n << 3;
+
+  return (x >> shift_amount & all_one_byte);
+}
 /*
  * logicalShift - shift x to the right by n, using a logical shift
  *   Can assume that 0 <= n <= 31
