@@ -161,7 +161,13 @@ int getByte(int x, int n) {
  *   Max ops: 20
  *   Rating: 3
  */
-int logicalShift(int x, int n) { return 2; }
+int logicalShift(int x, int n) { 
+    int shifted_x = x >> n;
+    int mask_seed = (1 << 31) >> n;
+    int mask = ~(mask_seed << 1);
+    
+    return shifted_x & mask;
+}
 /*
  * bitCount - returns count of number of 1's in word
  *   Examples: bitCount(5) = 2, bitCount(7) = 3
