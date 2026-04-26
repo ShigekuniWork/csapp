@@ -161,11 +161,11 @@ int getByte(int x, int n) {
  *   Max ops: 20
  *   Rating: 3
  */
-int logicalShift(int x, int n) { 
+int logicalShift(int x, int n) {
     int shifted_x = x >> n;
     int mask_seed = (1 << 31) >> n;
     int mask = ~(mask_seed << 1);
-    
+
     return shifted_x & mask;
 }
 /*
@@ -175,7 +175,36 @@ int logicalShift(int x, int n) {
  *   Max ops: 40
  *   Rating: 4
  */
-int bitCount(int x) { return 2; }
+int bitCount(int x) {
+    int mask_1bit, mask_2bit, mask_4bit, mask_8bit, mask_16bit;
+    
+    /* 0x55: 0101 for 1bit*/
+    mask_1bit = 0x55 | (0x55 << 8);
+    mask_1bit = mask_1bit | (mask_1bit << 16);
+
+    /* 0x33: 0011 for 2bit*/
+    mask_2bit = 0x33 | (0x33 << 8);
+    mask_2bit = mask_2bit | (mask_2bit << 16);
+
+    /* 0x0F: 00001111 for 4bit*/
+    mask_4bit = 0x0F | (0x0F << 8);
+    mask_4bit = mask_4bit | (mask_4bit << 16);
+
+    /* 0xFF: for 8bit */
+    mask_8bit = 0xFF | (0xFF << 16);
+
+    /* 0xFF: for 16bit */
+    mask_16bit = 0xFF | (0xFF << 8);
+
+
+    x = (x & mask_1bit) + ((x >>1) & mask_1bit);
+    x = (x & mask_2bit) + ((x >> 2) & mask_2bit);
+    x = (x & mask_4bit) + ((x >> 4) & mask_4bit);
+    x = (x & mask_8bit) + ((x >> 8) & mask_8bit);
+    x = (x & mask_16bit) + ((x >> 16) & mask_16bit);
+    
+    return x;
+}
 /*
  * bang - Compute !x without using !
  *   Examples: bang(3) = 0, bang(0) = 1
